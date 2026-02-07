@@ -1,3 +1,16 @@
+-- assert(SMODS.load_file("src/backs.lua"))()
 assert(SMODS.load_file("src/blinds.lua"))()
+-- assert(SMODS.load_file("src/boosters.lua"))()
+-- assert(SMODS.load_file("src/decks.lua"))()
+-- assert(SMODS.load_file("src/editions.lua"))()
+assert(SMODS.load_file("src/enhancement.lua"))()
 assert(SMODS.load_file("src/jokers.lua"))()
--- assert(SMODS.load_file("src/pokerhands.lua"))() -- upgrading one time decreases it and then upgrades it
+assert(SMODS.load_file("src/planets.lua"))()
+assert(SMODS.load_file("src/pokerhands.lua"))() -- upgrading one time decreases it and then upgrades it
+-- assert(SMODS.load_file("src/seals.lua"))()
+-- assert(SMODS.load_file("src/spectrals.lua"))()
+-- assert(SMODS.load_file("src/stakes.lua"))()
+-- assert(SMODS.load_file("src/stickers.lua"))()
+-- assert(SMODS.load_file("src/tags.lua"))()
+assert(SMODS.load_file("src/tarots.lua"))()
+assert(SMODS.load_file("src/vouchers.lua"))()

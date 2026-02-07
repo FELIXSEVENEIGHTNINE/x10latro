@@ -198,7 +198,7 @@ SMODS.Joker:take_ownership('superposition', {order = 59, cost = 40, config = {},
 SMODS.Joker:take_ownership ('todo_list',{order = 60, cost = 40, config = {extra = {dollars = 40,poker_hand = 'High Card',}},})
 SMODS.Joker:take_ownership ('cavendish',{order = 61,cost = 40, config = {extra = {odds = 10000,Xmult = 30,}},})
 SMODS.Joker:take_ownership ('card_sharp',{order = 62, cost = 60, config = {extra = { Xmult = 30, }},})
-SMODS.Joker:take_ownership ('red_card', { order = 63, cost = 50, config = { extra = 3, },})
+SMODS.Joker:take_ownership ('red_card', { order = 63, cost = 50, config = { extra = 30, },})
 SMODS.Joker:take_ownership ('madness', { order = 64, cost = 70, config = { extra = 5 },})
 SMODS.Joker:take_ownership ('square', {order = 65,cost = 40, config = {extra = {chips = 0,chip_mod = 40, },},})
 SMODS.Joker:take_ownership ('seance', {order = 66,cost = 60, config = {extra = {poker_hand = 'Straight Flush',},},})
