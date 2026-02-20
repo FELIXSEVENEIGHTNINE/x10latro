@@ -29,7 +29,7 @@ SMODS.Joker:take_ownership(
 
                 for i=1, #G.jokers.cards do
                     if G.jokers.cards[i].ability.name == 'Joker Stencil' then
-                        x_mult = x_mult * 10
+                        x_mult = x_mult + 1
                     end
                 end
 
@@ -51,11 +51,11 @@ SMODS.Joker:take_ownership(
 
                 for i = 1, #G.jokers.cards do
                     if G.jokers.cards[i].ability.name == 'Joker Stencil' then
-                        x_mult = x_mult * 10
+                        x_mult = x_mult + 1
                     end
                 end
 
-                x_mult = math.max(1, x_mult * 2)
+                x_mult = math.max(1, x_mult * 10)
 
                 return {
                     xmult = x_mult
@@ -199,7 +199,20 @@ SMODS.Joker:take_ownership('steel_joker', { order = 32, cost = 70, config = { ex
 SMODS.Joker:take_ownership('scary_face', { order = 33, cost = 40, config = { extra = 300 },})
 SMODS.Joker:take_ownership('abstract', { order = 34, cost = 40, config = { extra = 30 }, })
 SMODS.Joker:take_ownership('delayed_grat', { order = 35, cost = 40, config = { extra = 20 },})
-SMODS.Joker:take_ownership('hack', { order = 36, cost = 60, config = { extra = 10 },})
+
+SMODS.Joker:take_ownership(
+    'hack', 
+    { 
+        order = 36, 
+        cost = 60, 
+        config = { extra = 10 }, 
+        
+        loc_vars = function(self, info_queue, card) 
+            return { vars = { card.ability.extra } }
+        end,
+    }
+)
+
 SMODS.Joker:take_ownership('pareidolia', { order = 37, cost = 50, config = {},})
 SMODS.Joker:take_ownership('gros_michel', { order = 38, cost = 50, config = { extra = { odds = 60, mult = 150 }},})
 SMODS.Joker:take_ownership('even_steven', { order = 39, cost = 40, config = { extra = 40, }, })
@@ -218,7 +231,7 @@ SMODS.Joker:take_ownership('dna', { order = 51, cost = 80,config = {}}) -- need 
 SMODS.Joker:take_ownership ('splash', { order = 52, cost = 30, config = {},})
 SMODS.Joker:take_ownership ('blue_joker', { order = 53, cost = 50, config = { extra = 20, },})
 SMODS.Joker:take_ownership ('sixth_sense', { order = 54, cost = 60, config = {},})
-SMODS.Joker:take_ownership ('constellation', { order = 55, cost = 60, config = {extra = 1, Xmult = 10, },})
+SMODS.Joker:take_ownership ('constellation', { order = 55, cost = 60, config = {extra = 1, Xmult = 1, },})
 SMODS.Joker:take_ownership ('hiker', { order = 56, cost = 50, config = { extra = 50, },})
 SMODS.Joker:take_ownership ('faceless', { order = 57, cost = 40, config = {extra = {dollars = 50,faces = 30, }},})
 SMODS.Joker:take_ownership ('green_joker', { order = 58,cost = 40, config = { extra = { hand_add = 10, discard_sub = 10,}},})
@@ -230,15 +243,46 @@ SMODS.Joker:take_ownership ('red_card', { order = 63, cost = 50, config = { extr
 SMODS.Joker:take_ownership ('madness', { order = 64, cost = 70, config = { extra = 5 },})
 SMODS.Joker:take_ownership ('square', {order = 65,cost = 40, config = {extra = {chips = 0,chip_mod = 40, },},})
 SMODS.Joker:take_ownership ('seance', {order = 66,cost = 60, config = {extra = {poker_hand = 'Straight Flush',},},})
-SMODS.Joker:take_ownership('riff_raff', {order = 67,cost = 60,config = {extra = 20},}) -- need to reflect 
-SMODS.Joker:take_ownership ('vampire', { order = 68, cost = 70, config = { extra = 1, Xmult = 10,},})
+SMODS.Joker:take_ownership(
+    'riff_raff', 
+    {
+        order = 67,
+        cost = 60,
+        config = {extra = 20},
+
+        calculate = function(self, card, context)
+            if context.setting_blind and #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit then
+                local jokers_to_create = math.min(card.ability.extra,
+                    G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer))
+                G.GAME.joker_buffer = G.GAME.joker_buffer + jokers_to_create
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        for _ = 1, jokers_to_create do
+                            local card = create_card('Joker', G.jokers, nil, 0, nil, nil, nil, 'rif')
+                            card:add_to_deck()
+                            G.jokers:emplace(card)
+                            card:start_materialize()
+                            G.GAME.joker_buffer = 0
+                        end
+                        return true
+                    end
+                }))
+                return {
+                    message = localize('k_plus_joker'),
+                    colour = G.C.BLUE,
+                }
+            end
+        end,
+    }
+) -- need to reflect 
+SMODS.Joker:take_ownership ('vampire', { order = 68, cost = 70, config = { extra = 1, Xmult = 1,},})
 SMODS.Joker:take_ownership ('shortcut', { order = 69, cost = 70, config = {},})
-SMODS.Joker:take_ownership ('hologram', { order = 70, cost = 70, config = {extra = 2.5, Xmult = 10},})
+SMODS.Joker:take_ownership ('hologram', { order = 70, cost = 70, config = {extra = 2.5, Xmult = 1},})
 SMODS.Joker:take_ownership ('vagabond', { order = 71, cost = 80, config = {extra = 40},})
 SMODS.Joker:take_ownership ('baron', { order = 72, cost = 80, config = {extra = 15},})
 SMODS.Joker:take_ownership ('cloud_9', { order = 73, cost = 70, config = {extra = 10},})
 SMODS.Joker:take_ownership ('rocket', { order = 74, cost = 60, config = {extra = { dollars = 10, increase = 20}},})
-SMODS.Joker:take_ownership ('obelisk', { order = 75, cost = 80, config = { extra = 2, Xmult = 10,},})
+SMODS.Joker:take_ownership ('obelisk', { order = 75, cost = 80, config = { extra = 2, Xmult = 1,},})
 SMODS.Joker:take_ownership ('midas_mask', { order = 76, cost = 70, config = {} })
 SMODS.Joker:take_ownership ('luchador', { order = 77, cost = 50, config = {} })
 SMODS.Joker:take_ownership ('photograph', { order = 78, cost = 50, config = {extra = 20}})
@@ -248,13 +292,49 @@ SMODS.Joker:take_ownership ('erosion', { order = 81, cost = 60, config = {extra 
 SMODS.Joker:take_ownership ('reserved_parking', { order = 82, cost = 60, config = {extra = {odds = 20, dollars = 10}} })
 SMODS.Joker:take_ownership ('mail', { order = 83, cost = 40, config = {extra = 50} })
 SMODS.Joker:take_ownership ('to_the_moon', {order = 84, cost = 50, config = {extra = 10}})
-SMODS.Joker:take_ownership ('hallucination', { order = 85, cost = 40, config = {extra = 10}})
-SMODS.Joker:take_ownership ('fortune_teller', { order = 86, cost = 60, config = { extra = 10 },}) -- reflect
+SMODS.Joker:take_ownership ('hallucination', { order = 85, cost = 40, config = {extra = 20}})
+SMODS.Joker:take_ownership(
+    'fortune_teller', 
+    { 
+        order = 86, 
+        cost = 60, 
+        config = { 
+            extra = {
+                add_mult = 10,
+                current_mult = 0
+            },
+        },
+
+        loc_vars = function(self, info_queue, card)
+            return { 
+                vars = { 
+                    card.ability.extra.add_mult, 
+                    card.ability.extra.current_mult
+                }
+            }
+        end,
+
+        calculate = function(self, card, context)
+            if context.using_consumeable and not context.blueprint and context.consumeable.ability.set == "Tarot" then
+                card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.add_mult
+                return {
+                    message = localize { type = 'variable', key = 'a_mult', vars = { G.GAME.consumeable_usage_total.tarot * card.ability.extra } },
+                }
+            end
+            if context.joker_main then
+                return {
+                    mult = card.ability.extra.current_mult
+                }
+            end
+        end,
+    }
+)
+
 SMODS.Joker:take_ownership ('juggler', { order = 87, cost = 40, config = { h_size = 10 },})
 SMODS.Joker:take_ownership ('drunkard', { order = 88, cost = 40, config = { d_size = 10 },})
 SMODS.Joker:take_ownership ('stone', { order = 89, cost = 60, config = {extra = 250}})
 SMODS.Joker:take_ownership ('golden', { order = 90, cost = 60, config = {extra = 40}})
-SMODS.Joker:take_ownership ('lucky_cat', { order = 91, cost = 60, config = {Xmult = 10, extra = 2.5}})
+SMODS.Joker:take_ownership ('lucky_cat', { order = 91, cost = 60, config = {Xmult = 1, extra = 2.5}})
 SMODS.Joker:take_ownership ('baseball', { order = 92, cost = 80, config = {extra = 15}})
 SMODS.Joker:take_ownership ('bull', { order = 93, cost = 60, config = {extra = 20}})
 SMODS.Joker:take_ownership ('diet_cola', { order = 94, cost = 60, config = {}})
@@ -283,7 +363,7 @@ SMODS.Joker:take_ownership('rough_gem', { order = 116, cost = 70, config = { ext
 SMODS.Joker:take_ownership('bloodstone', { order = 117, cost = 70, config = { extra = { odds = 20, Xmult = 15, }},})
 SMODS.Joker:take_ownership('arrowhead', { order = 118, cost = 70, config = { extra = 500 },})
 SMODS.Joker:take_ownership('onyx_agate', { order = 119, cost = 70, config = { extra = 70 },})
-SMODS.Joker:take_ownership ('glass', { order = 120, cost = 60, config = { extra = 7.5, Xmult = 10,},})
+SMODS.Joker:take_ownership ('glass', { order = 120, cost = 60, config = { extra = 7.5, Xmult = 1,},})
 SMODS.Joker:take_ownership ('ring_master', { order = 121, cost = 50, config = {}, })
 SMODS.Joker:take_ownership ('flower_pot', {order = 122,cost = 60, config = {extra = 30,},})
 SMODS.Joker:take_ownership ('blueprint', {order = 123, cost = 10, config = {}})

@@ -39,7 +39,7 @@ SMODS.Back:take_ownership(
     'black',
     {
         config = {
-            hands = -1,
+            hands = -10,
             joker_slot = 10,
         }
     }
@@ -51,7 +51,7 @@ SMODS.Back:take_ownership(
     {
         config = {
             voucher = 'v_crystal_ball',
-            consumables = {'c_fool', 'c_fool'},
+            consumables = {'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool', 'c_fool'},
         }
     }
 )
@@ -62,7 +62,7 @@ SMODS.Back:take_ownership(
     {
         config = {
             voucher = 'v_telescope',
-            consumable_slot = -1,
+            consumable_slot = -10,
         }
     }
 )
@@ -104,7 +104,7 @@ SMODS.Back:take_ownership(
     {
         config = {
             hand_size = 20,
-            joker_slot = -1
+            joker_slot = -10
         },
     }
 )
